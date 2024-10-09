@@ -2,8 +2,8 @@ use std::net::{Ipv4Addr, SocketAddr};
 
 use anyhow::Result;
 use axum::{extract::State, http::StatusCode, routing::get, Router};
-use tokio::net::TcpListener;
 use sqlx::{postgres::PgConnectOptions, PgPool};
+use tokio::net::TcpListener;
 
 struct DatabaseConfig {
     pub host: String,
@@ -57,7 +57,7 @@ async fn health_check_db_works(pool: sqlx::PgPool) {
 }
 
 #[tokio::main]
-async fn main()  -> Result<()> {
+async fn main() -> Result<()> {
     let database_cfg = DatabaseConfig {
         host: "localhost".into(),
         port: 5432,
