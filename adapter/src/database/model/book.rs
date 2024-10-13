@@ -9,7 +9,7 @@ pub struct BookRow {
     pub description: String,
 }
 
-impl From<BookRow> for Book{
+impl From<BookRow> for Book {
     fn from(value: BookRow) -> Self {
         let BookRow {
             book_id,
@@ -20,10 +20,10 @@ impl From<BookRow> for Book{
         } = value;
         Self {
             id: book_id,
-            title: title,
-            author: author,
-            isbn: isbn,
-            description: description,
+            title,
+            author,
+            isbn,
+            description,
         }
     }
 }
