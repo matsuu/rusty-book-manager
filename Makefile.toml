@@ -35,6 +35,7 @@ JAEGER_PORT = 6831
 run_task = [
     { name = [
         "compose-up-db",
+        "migrate",
         "compose-up-redis",
     ] },
 ]
@@ -55,15 +56,15 @@ args = ["run", "${@}"]
 
 [tasks.run-in-docker]
 extend = "set-env-docker"
-dependencies = ["before-build", "compose-build-up"]
+dependencies = ["before-build", "compose-build-app"]
 command = "docker"
 args = ["compose", "up", "-d", "app"]
 
 [tasks.logs]
 extend = "set-env-docker"
 dependencies = ["before-build"]
-command = "cargo"
-args = ["build", "${@}"]
+command = "docker"
+args = ["compose", "logs", "${@}"]
 
 [tasks.build]
 extend = "set-env-local"
@@ -95,6 +96,7 @@ args = ["clippy", "--all", "--all-targets", "${@}"]
 
 [tasks.test]
 extend = "set-env-local"
+dependencies = ["before-build"]
 install_crate = { crate_name = "cargo-nextest", binary = "cargo", test_arg = [
   "nextest", "--help",
 ] }
@@ -136,8 +138,18 @@ args = [
   "run", "-it", "--rm",
   "--network", "host",
   "-v", "${PWD}:/work",
+  "postgres:15", "psql", "${DATABASE_URL}", "${@}"
+]
+
+[tasks.initial-setup]
+extend = "set-env-local"
+command = "docker"
+args = [
+  "run", "-it", "--rm",
+  "--network", "host",
+  "-v", "${PWD}:/work",
   "postgres:15", "psql", "${DATABASE_URL}",
-  "-f", "/work/data/initial_setup.sql",
+  "-f", "/work/data/initial_setup.sql"
 ]
 
 [tasks.compose]
