@@ -9,6 +9,7 @@ publish.workspace = true
 shared.workspace = true
 async-trait.workspace = true
 derive-new.workspace = true
+chrono.workspace = true
 mockall.workspace = true
 serde.workspace = true
 uuid.workspace = true
